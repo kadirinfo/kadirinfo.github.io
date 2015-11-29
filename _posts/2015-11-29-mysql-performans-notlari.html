@@ -5,119 +5,118 @@ date:   2015-11-29 14:36:00
 categories: mysql performans ipucu
 ---
 
-h1. {{ page.title }}
+<h1>{{ page.title }}</h1>
 
-p(meta).
-MySQL ile yüksek performans gerektiren işler yaptığımızda karşımıza çoğu zaman konfigurasyon ile ilgili gündemler gelir.
+<p>MySQL ile yüksek performans gerektiren işler yaptığımızda karşımıza çoğu zaman konfigurasyon ile ilgili gündemler gelir.
 Hangi buffer'ı artırıp hangisini azaltacağımıza karar verebilmek için mySQL gurusu olmak zorunda kalabiliyoruz.
 Ortalama bir sistem yöneticisi ve yazılım geliştiricisi o kadar derinlemesine öğrenmek yerine temel performans kriterlerini
-öğrenmekle yetinmek isteyebilir. Baran Bey'in tercüme ettiği, monitis.com'da yayınlanmış listeyi kullanımınıza sunuyorum.
+öğrenmekle yetinmek isteyebilir. Baran Bey'in tercüme ettiği, monitis.com'da yayınlanmış listeyi kullanımınıza sunuyorum.</p>
 
 
-- bütün innodb dosyanızı memoryde tutacak kadar raminiz olsun. innodb dosya memoryden ulaşıldığında diskten ulaşılmasına göre çok daha hızlı olacaktır
-- swap'ten ne olursa olsun kaçının. swapping diskten okuma demektir ve yavaştır
-- pil destekli ram kullanın ( non volatile ram olarak geçiyorlar)
-- gelişmiş raid sistemi ullanın. tercihen raid 10 ve üstü
-- raid5 ten kaçının checksum integrity kontrolü pahalı bir işlemdir.
-- os ve data partitionlarını ayırın. sadece logical olarak değil fiziksel olarak da ayırın. os yazma işlemleri database performansınızı düşürür
-- mysql temp alanını ve replication loglarını datanızdan ayrı bir partitionda tutun. arkaplan yazmaları database performansınızı etkileyebilir.
-- ne kadar fazla disk o kadar fazla performans demektir
-- sas ı sata'ya tercih edin
-- ufak diskler büyük disklere göre daha hızlıdır. özellikle raid configlerinde
-- pil destekli cache raid controller kullanın
-- software raidlerden uzak durun
-- data partition için solid state io kart kullanmayı düşünün. bu kartlar 2gb/s yazmaya kadar dayanırlar.
-- linux sistemlerde swappiness değerini 0a ayarlayın. cache file ları database serverında tutmanın bir nedeni yoktur bu iş daha çok web server veya desktop sistemler için uygundur
-- filesystem mount ederken eğer var ise noatime ve nodirtime ile mount edin. erişim için database file modification zamanını tutmanın bir nedeni yoktur.
-- xfs file system kullanın. ext3ten daha hızlı ve daha ufak bir filesystemdir ve daha fazla opsiyon barındırır.
-- xfs filesystem logunu ve buffer variable larını maksimum performans için ayarlayın.
-- linux sistemlerde noop ve dieadline io scheduler kullanın. cfq ve anticipatory scheduler bu ikisine göre daha yavaştır.
-- 64 bit os kullanın. daha fazla memory adresini mysql kullanabilir
-- kullanılmayan paketleri ve daemonları sistemizden silin
-- host ve mysql host larını hosts dosyası içinde tutun. dns lookuplardan kurtulmuş olursunuz.
-- asla bir mysql processini force kill etmeyin bu databasei bozabilir veya çalışan backup işlemlerini bozabilir.
-- sunucuyu tamamen mysql için kullanın. background processler cpu ve memory'den çalarlar
+<p>- bütün innodb dosyanızı memoryde tutacak kadar raminiz olsun. innodb dosya memoryden ulaşıldığında diskten ulaşılmasına göre çok daha hızlı olacaktır</p>
+<p>- swap'ten ne olursa olsun kaçının. swapping diskten okuma demektir ve yavaştır</p>
+<p>- pil destekli ram kullanın ( non volatile ram olarak geçiyorlar)</p>
+<p>- gelişmiş raid sistemi ullanın. tercihen raid 10 ve üstü</p>
+<p>- raid5 ten kaçının checksum integrity kontrolü pahalı bir işlemdir.</p>
+<p>- os ve data partitionlarını ayırın. sadece logical olarak değil fiziksel olarak da ayırın. os yazma işlemleri database performansınızı düşürür</p>
+<p>- mysql temp alanını ve replication loglarını datanızdan ayrı bir partitionda tutun. arkaplan yazmaları database performansınızı etkileyebilir.</p>
+<p>- ne kadar fazla disk o kadar fazla performans demektir</p>
+<p>- sas ı sata'ya tercih edin</p>
+<p>- ufak diskler büyük disklere göre daha hızlıdır. özellikle raid configlerinde</p>
+<p>- pil destekli cache raid controller kullanın</p>
+<p>- software raidlerden uzak durun</p>
+<p>- data partition için solid state io kart kullanmayı düşünün. bu kartlar 2gb/s yazmaya kadar dayanırlar.</p>
+<p>- linux sistemlerde swappiness değerini 0a ayarlayın. cache file ları database serverında tutmanın bir nedeni yoktur bu iş daha çok web server veya desktop sistemler için uygundur</p>
+<p>- filesystem mount ederken eğer var ise noatime ve nodirtime ile mount edin. erişim için database file modification zamanını tutmanın bir nedeni yoktur.</p>
+<p>- xfs file system kullanın. ext3ten daha hızlı ve daha ufak bir filesystemdir ve daha fazla opsiyon barındırır.</p>
+<p>- xfs filesystem logunu ve buffer variable larını maksimum performans için ayarlayın.</p>
+<p>- linux sistemlerde noop ve dieadline io scheduler kullanın. cfq ve anticipatory scheduler bu ikisine göre daha yavaştır.</p>
+<p>- 64 bit os kullanın. daha fazla memory adresini mysql kullanabilir</p>
+<p>- kullanılmayan paketleri ve daemonları sistemizden silin</p>
+<p>- host ve mysql host larını hosts dosyası içinde tutun. dns lookuplardan kurtulmuş olursunuz.</p>
+<p>- asla bir mysql processini force kill etmeyin bu databasei bozabilir veya çalışan backup işlemlerini bozabilir.</p>
+<p>- sunucuyu tamamen mysql için kullanın. background processler cpu ve memory'den çalarlar</p>
 mysql configuration
-- innodb_flush_method=O_DIRECT yazarken double buffer yapmayı engeller
-- ext3 systemlerde O_DIRECT'ten kaçının
-- innodb_buffer_pool_size bütün innodb file alabilecek kadar ayarlayın
-- innodb_log_file_size ı çok büyük tutmayın.
-- innodb_thread_concurrency ve thread_concurrency değişkenlerini karıştırmayın. bu iki değişken uyumlu değildir (?)
-- max_connections değişkenini olabildiğince minimal tutmaya çalışın. fazla değerler ram kullanımını artırır ve mysqli kitlemeye neden olabilir
-- thread_cache olabildiğince yüksek bir rakamda tutmaya çalışın, 16 civarı bir rakam gibi, bağlantı açarkenki yavaşlığı engeller.
-- skip-name-resolve kullanımı dns lookupları azaltacaktır.
-- eğer queryleriniz sıklıkla tekrar eden cinsten ise ve sonuçları sıkça değişmiyorsa query cache kullanın
-- disk yazmayı engellemek için temp_table_size değerini artırın
-- disk yazmayı engellemek için hax_heap_table_size değerini artırın
-- sort_buffer_size değerini çok yüksek tutmayın. bu değer açılan bağlantı başına değerdir ve rami hızlıca yiyebilir.
-- key_read_requests değerini monitor edin ve böylece key_buffer_size değerini belirleyin. key read requests değeri key_reads değerinden yüksek olmalıdır aksi takdirde key_buffer ı verimli bir şekilde kullanamazsınız
-- innodb_flush_log_at_trx_commit = 0 olarak ayarlamak performansı artıracaktır. defult 1 bırakırsanız data integrity güven altına almış olacaksınız ve replication işlemi laglı olmayacaktır.
-- config değerlerini test edebileceğiniz bir test ortamı sağlayın böylece sıklıkla restart edip production ortamını bozmamış olursunuz.
-- veritabanı yapısını olabildiğince toplu tutun
-- eski dataları arşivleyin veri setinizi olabildiğince ufak tutun
-- tablolarınıza index oluşturun
-- index kullanımını çok fazla tutmayın, querylerinize göre optimize edin
-- text ve blob data tiplerini sıkıştırın. alan ve disk okuma sayısını azaltmış olursunuz
-- utf8 ve utf16 latin1e göre daha yavaştır
-- triggerları olabildiğince az sıklıkta kullanın
-- tekrar eden datayı olabildiğince minimum tutun. data duplicationı gereksiz yere yapmamaya çalışın
-- row genişletme yerine tablo linklemeyi kullanın
-- data tiplerine dikkat gösterin olabildiğince minimum yer kaplayan data tipini seçmeye çalışın
-- blob ve text datayı queryde fazla kullanılmıyorsa diğer datadan ayrı tutmaya çalışın.
-- check table ve optimize table olayını sıkça yapın
-- innodb tabloları optimize etmek için sıklıkla rewrite edin
-- bazen indexi drop edip kolonu ekledikten sonra indexi tekrar eklemek daha hızlı olabilir
-- değişik ihtiyaçlar için değişik storage engineleri kullanın
-- log tutulan tablolar ve rapor tabloları için archive storage engine kullanın
-- session datayı mysql yerine memcache de tutmaya çalışın.
-- değişken uzunluktaki stringler için char yerine varchar kullanın
-- tablo şema değişiklerini olabildiğince adım adım yapmaya çalışın
-- şema değişiklerini öncelikle test ortamında gerçekleştirin. bu test ortamı productionın birebir kopyası olmasına özen gösterin
-- config dosyanızdaki değerleri gelişigüzel bir biçimde değiştirip denemeyin
-- bazen değerlerden az olanı mysql için daha iyi olabilir
-- şüphede kaldığınız zaman generic bir mysql config dosyası kullanın
-- slow query logu yavaş çalışan queryleriniz için mutlaka kullanın
-- sorgularınız düzgün bir biçimde fonksiyonunu yerine getiriyor mu diye explain keywordunu kullanın
-- querylerini sıklıkla test edin. optimal çalışıp çalışmadıklarını kontrol edin. zaman geçtikçe performans değişimleri olabilir.
-- count(*) dan kaçının, tüm tabloyu lock edebilir
-- querylerinizi olabildiğince tek tip tutmaya çalışın, böylece benzer queryler query cache kullanabilirler
-- uygun olan durumlarda group by kullanmayı distinct e tercih edin
-- where, group by, order by geçen kolonlara index atın
-- bir kolonu birden fazla indexde kullanmamaya çalışın
-- bazen mysql yanlış index kullanabilir use index keywordunu bu durumlarda kullanın
-- SQL_MODE=STRICT için herhangi bir sorun var mı kontrol edin
-- UNION kullanırken 5ten az indexli alanlarda OR yerine LIMIT kullanın
-- önce select yapıp daha sonra varsa update etmek yerine INSERT ON DUPLICATE KEY veya INSERT IGNORE kullanın
-- MAX yerine indexlenmiş bir alan kullanın ve ORDER BY kullanın
-- ORDER BY RAND() kullanımından kaçının
-- LIMIT M,N bazen queryleri yavaşlatabilir, az kullanmaya çalışın
-- WHERE içinde subquery yerine UNION kullanın
-- UPDATE için exclusive lock engellemek için SHARE MODE kullanın
-- MYSQL server restart ettiğinde database warm etmesini bekleyin, böylece tüm data memory'ye yüklenmiş olur ve queryler hızlıca yanıt verir.
-- DROP TABLE ve ardına CREATE TABLE kullanın DELETE FROM ile tüm veriyi silecekseniz.
-- queryde select ettiğiniz veri alanı sayısını olabildiğince az tutun SELECT * dan kaçının
-- multiple connections kullanmak yerine persistent connections kullanmak bazen daha az pahalı bir işlem olabilir.
-- querylerinizi server üzerinde yük varken de benchmarktan geçirin. bazen basit queryler diğer queryleri de etkileyebilirler.
-- yük arttığı zaman SHOW PROCESSLIST ile yavaş ve problemli queryleri izleyin
-- tüm şüphe duyduğunuz queryleri development ortamında test edin.
-- backuplarınızı ikincil replika sunucudan alın
-- backup sırasında replication işlemini durdurun.
-- bütün mysql sunucularını durdurup database dosyalarının backuplarını alın
-- eğer mysql dump kullanılıyorsa binary log dosyalarının da backupını aynı zamanda alın. böylece replication işleminin bozulmadığından emin olun
-- backup işlemi için LVM snapshotlarına güvenmeyin.
-- dump dosyalarınızı tablo yedekleme ve kurtarma için tablo bazında almaya çalışın.
-- mysqldump kullanırken --opt kulanın
-- backup almadan önce check table optimize table komutlarını kullanın.
-- yedek import ederken foreign constraints etkisiz bırakarak daha hızlı import alabilirsiniz
-- aynı şekilde unique checks etkisiz bırakarak da daha hızlı import alabilirsiniz.
-- her bir backupdan sonra database boyutu ve tablo boyutlarını inceleyerek büyümeyi gözlemlein
-- slave replication errorları bir cron script yazarak gözlemleyin
-- düzenli bir şekilde database backupı alın
-- backuplarınızı düzenli bir şekilde test edin
-- son madde reklam içeriyor kendi monitoring toollarına da isterseniz göz atabilirsiniz: http://www.monitis.com/application-monitoring/database-monitoring?lang=en
+<p>- innodb_flush_method=O_DIRECT yazarken double buffer yapmayı engeller</p>
+<p>- ext3 systemlerde O_DIRECT'ten kaçının</p>
+<p>- innodb_buffer_pool_size bütün innodb file alabilecek kadar ayarlayın</p>
+<p>- innodb_log_file_size ı çok büyük tutmayın.</p>
+<p>- innodb_thread_concurrency ve thread_concurrency değişkenlerini karıştırmayın. bu iki değişken uyumlu değildir (?)</p>
+<p>- max_connections değişkenini olabildiğince minimal tutmaya çalışın. fazla değerler ram kullanımını artırır ve mysqli kitlemeye neden olabilir</p>
+<p>- thread_cache olabildiğince yüksek bir rakamda tutmaya çalışın, 16 civarı bir rakam gibi, bağlantı açarkenki yavaşlığı engeller.</p>
+<p>- skip-name-resolve kullanımı dns lookupları azaltacaktır.</p>
+<p>- eğer queryleriniz sıklıkla tekrar eden cinsten ise ve sonuçları sıkça değişmiyorsa query cache kullanın</p>
+<p>- disk yazmayı engellemek için temp_table_size değerini artırın</p>
+<p>- disk yazmayı engellemek için hax_heap_table_size değerini artırın</p>
+<p>- sort_buffer_size değerini çok yüksek tutmayın. bu değer açılan bağlantı başına değerdir ve rami hızlıca yiyebilir.</p>
+<p>- key_read_requests değerini monitor edin ve böylece key_buffer_size değerini belirleyin. key read requests değeri key_reads değerinden yüksek olmalıdır aksi takdirde key_buffer ı verimli bir şekilde kullanamazsınız</p>
+<p>- innodb_flush_log_at_trx_commit = 0 olarak ayarlamak performansı artıracaktır. defult 1 bırakırsanız data integrity güven altına almış olacaksınız ve replication işlemi laglı olmayacaktır.</p>
+<p>- config değerlerini test edebileceğiniz bir test ortamı sağlayın böylece sıklıkla restart edip production ortamını bozmamış olursunuz.</p>
+<p>- veritabanı yapısını olabildiğince toplu tutun</p>
+<p>- eski dataları arşivleyin veri setinizi olabildiğince ufak tutun</p>
+<p>- tablolarınıza index oluşturun</p>
+<p>- index kullanımını çok fazla tutmayın, querylerinize göre optimize edin</p>
+<p>- text ve blob data tiplerini sıkıştırın. alan ve disk okuma sayısını azaltmış olursunuz</p>
+<p>- utf8 ve utf16 latin1e göre daha yavaştır</p>
+<p>- triggerları olabildiğince az sıklıkta kullanın</p>
+<p>- tekrar eden datayı olabildiğince minimum tutun. data duplicationı gereksiz yere yapmamaya çalışın</p>
+<p>- row genişletme yerine tablo linklemeyi kullanın</p>
+<p>- data tiplerine dikkat gösterin olabildiğince minimum yer kaplayan data tipini seçmeye çalışın</p>
+<p>- blob ve text datayı queryde fazla kullanılmıyorsa diğer datadan ayrı tutmaya çalışın.</p>
+<p>- check table ve optimize table olayını sıkça yapın</p>
+<p>- innodb tabloları optimize etmek için sıklıkla rewrite edin</p>
+<p>- bazen indexi drop edip kolonu ekledikten sonra indexi tekrar eklemek daha hızlı olabilir</p>
+<p>- değişik ihtiyaçlar için değişik storage engineleri kullanın</p>
+<p>- log tutulan tablolar ve rapor tabloları için archive storage engine kullanın</p>
+<p>- session datayı mysql yerine memcache de tutmaya çalışın.</p>
+<p>- değişken uzunluktaki stringler için char yerine varchar kullanın</p>
+<p>- tablo şema değişiklerini olabildiğince adım adım yapmaya çalışın</p>
+<p>- şema değişiklerini öncelikle test ortamında gerçekleştirin. bu test ortamı productionın birebir kopyası olmasına özen gösterin</p>
+<p>- config dosyanızdaki değerleri gelişigüzel bir biçimde değiştirip denemeyin</p>
+<p>- bazen değerlerden az olanı mysql için daha iyi olabilir</p>
+<p>- şüphede kaldığınız zaman generic bir mysql config dosyası kullanın</p>
+<p>- slow query logu yavaş çalışan queryleriniz için mutlaka kullanın</p>
+<p>- sorgularınız düzgün bir biçimde fonksiyonunu yerine getiriyor mu diye explain keywordunu kullanın</p>
+<p>- querylerini sıklıkla test edin. optimal çalışıp çalışmadıklarını kontrol edin. zaman geçtikçe performans değişimleri olabilir.</p>
+<p>- count(*) dan kaçının, tüm tabloyu lock edebilir</p>
+<p>- querylerinizi olabildiğince tek tip tutmaya çalışın, böylece benzer queryler query cache kullanabilirler</p>
+<p>- uygun olan durumlarda group by kullanmayı distinct e tercih edin</p>
+<p>- where, group by, order by geçen kolonlara index atın</p>
+<p>- bir kolonu birden fazla indexde kullanmamaya çalışın</p>
+<p>- bazen mysql yanlış index kullanabilir use index keywordunu bu durumlarda kullanın</p>
+<p>- SQL_MODE=STRICT için herhangi bir sorun var mı kontrol edin</p>
+<p>- UNION kullanırken 5ten az indexli alanlarda OR yerine LIMIT kullanın</p>
+<p>- önce select yapıp daha sonra varsa update etmek yerine INSERT ON DUPLICATE KEY veya INSERT IGNORE kullanın</p>
+<p>- MAX yerine indexlenmiş bir alan kullanın ve ORDER BY kullanın</p>
+<p>- ORDER BY RAND() kullanımından kaçının</p>
+<p>- LIMIT M,N bazen queryleri yavaşlatabilir, az kullanmaya çalışın</p>
+<p>- WHERE içinde subquery yerine UNION kullanın</p>
+<p>- UPDATE için exclusive lock engellemek için SHARE MODE kullanın</p>
+<p>- MYSQL server restart ettiğinde database warm etmesini bekleyin, böylece tüm data memory'ye yüklenmiş olur ve queryler hızlıca yanıt verir.</p>
+<p>- DROP TABLE ve ardına CREATE TABLE kullanın DELETE FROM ile tüm veriyi silecekseniz.</p>
+<p>- queryde select ettiğiniz veri alanı sayısını olabildiğince az tutun SELECT * dan kaçının</p>
+<p>- multiple connections kullanmak yerine persistent connections kullanmak bazen daha az pahalı bir işlem olabilir.</p>
+<p>- querylerinizi server üzerinde yük varken de benchmarktan geçirin. bazen basit queryler diğer queryleri de etkileyebilirler.</p>
+<p>- yük arttığı zaman SHOW PROCESSLIST ile yavaş ve problemli queryleri izleyin</p>
+<p>- tüm şüphe duyduğunuz queryleri development ortamında test edin.</p>
+<p>- backuplarınızı ikincil replika sunucudan alın</p>
+<p>- backup sırasında replication işlemini durdurun.</p>
+<p>- bütün mysql sunucularını durdurup database dosyalarının backuplarını alın</p>
+<p>- eğer mysql dump kullanılıyorsa binary log dosyalarının da backupını aynı zamanda alın. böylece replication işleminin bozulmadığından emin olun</p>
+<p>- backup işlemi için LVM snapshotlarına güvenmeyin.</p>
+<p>- dump dosyalarınızı tablo yedekleme ve kurtarma için tablo bazında almaya çalışın.</p>
+<p>- mysqldump kullanırken --opt kulanın</p>
+<p>- backup almadan önce check table optimize table komutlarını kullanın.</p>
+<p>- yedek import ederken foreign constraints etkisiz bırakarak daha hızlı import alabilirsiniz</p>
+<p>- aynı şekilde unique checks etkisiz bırakarak da daha hızlı import alabilirsiniz.</p>
+<p>- her bir backupdan sonra database boyutu ve tablo boyutlarını inceleyerek büyümeyi gözlemlein</p>
+<p>- slave replication errorları bir cron script yazarak gözlemleyin</p>
+<p>- düzenli bir şekilde database backupı alın</p>
+<p>- backuplarınızı düzenli bir şekilde test edin</p>
+<p>- son madde reklam içeriyor kendi monitoring toollarına da isterseniz göz atabilirsiniz: http://www.monitis.com/application-monitoring/database-monitoring?lang=en</p>
 
 Tercüme Eden: Baran Sakallıoğlu
 
 
-http://blog.monitis.com/index.php/2011/07/12/101-tips-to-mysql-tuning-and-optimization/
+<p></p>http://blog.monitis.com/index.php/2011/07/12/101-tips-to-mysql-tuning-and-optimization/</
 
