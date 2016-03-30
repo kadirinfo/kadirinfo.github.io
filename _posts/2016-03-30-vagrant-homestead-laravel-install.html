@@ -1,0 +1,23 @@
+---
+layout: post
+title:  "Vagrant, Homestead, Composer ve Laravel kurulumu"
+date:   2016-03-30 11:19:00
+categories: laravel homestead composer vagrant php
+---
+
+
+
+
+
+{% highlight hash %}
+apt-get install virtualbox vagrant composer 
+
+composer create-project --prefer-dist laravel/laravel xyz
+cd xyz/
+composer require laravel/homestead
+php vendor/laravel/homestead/homestead make
+
+vagrant up
+
+
+{% endhighlight %}
