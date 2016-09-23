@@ -1,0 +1,27 @@
+---
+layout: post
+title:  "Laravel için Ubuntu'ya PHP 5.6 kurulumu"
+date:   2016-03-30 11:19:00
+categories: laravel composer php ubuntu linux mint
+---
+
+
+
+
+
+{% highlight hash %}
+Paket listesini ekliyoruz
+sudo add-apt-repository ppa:ondrej/php
+
+PHP 5.6'yı kuruyoruz.
+sudo apt-get update
+sudo apt-get install php5.6
+
+Laravel için gerekli eklentileri kuruyoruz.
+sudo apt-get install php5.6-mbstring php5.6-mcrypt php5.6-mysql php5.6-xml
+
+PHP versiyonuna bakıyoruz.
+sudo php -v
+
+
+{% endhighlight %}
